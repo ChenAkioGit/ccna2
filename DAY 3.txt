@@ -1,0 +1,111 @@
+TASK1: HOW TO PRETEND/FAKE HAVING 2/3 YEARS IN NETWORK ENGINEERING
+{AT GET AWAY WITH IT}
+
+http://msp.rivannoc.com/otrs/index.pl
+admin
+C1sc0123
+
+http://msp.rivannoc.com/otrs/customer.pl
+admin
+C1sc0123
+
+TASK 2: NETWORK ADDRESS, HOST ADDRESS, IP ADDRESS
+10.0.0.5/8 = IP ADDRESS: NETWORK ADDRESS + HOST ADDRESS: 
+
+HOW TO ROUTE: STATIC, DEFAULT, OSPF, EIGRP, BGP, VPNTUNNELING
+PICK A POSITION:
+R4: STATICROUTING:
+conf t
+ip route 10.1.1.4 255.255.255.252 10.1.1.9
+ip route 10.1.1.0 255.255.255.252 10.1.1.9
+R3
+ip route 10.1.1.0 255.255.255.252 10.1.1.5
+R2
+R3:
+ip route 10.1.1.8 255.255.255.252 10.1.1.6
+R1
+ip route 10.1.1.4 255.255.255.252 10.1.1.2
+ip route 10.1.1.8 255.255.255.252 10.1.1.2
+
+STATIC ROUTING FOR RUSSIAN IP ADDRESS:
+R4:
+100.43.72.0/24	1STHOP: 10.1.1.9 linux:208.8.8.2 windows 10.3.3.1
+CISCO: IP ROUTE 100.43.72.0 255.255.255.0 10.1.1.9
+LINUX: ip route add 100.43.72.0/24 via 208.8.8.2
+WINDOWS: route add 100.43.72.0 mask 255.255.255.0 10.3.3.1
+
+TASK 4: REMOVING STATIC ROUTE
+conf t
+R4
+no ip route 10.1.1.4 255.255.255.252 10.1.1.9
+no ip route 10.1.1.0 255.255.255.252 10.1.1.9
+R3
+no ip route 10.1.1.0 255.255.255.252 10.1.1.5
+R2
+no ip route 10.1.1.8 255.255.255.252 10.1.1.6
+R1
+no ip route 10.1.1.4 255.255.255.252 10.1.1.2
+no ip route 10.1.1.8 255.255.255.252 10.1.1.2
+
+STATIC ROUTING FOR RUSSIAN IP ADDRESS:
+R4:
+100.43.72.0/24	1STHOP: 10.1.1.9 linux:208.8.8.2 windows 10.3.3.1
+CISCO: IP ROUTE 100.43.72.0 255.255.255.0 10.1.1.9
+LINUX: ip route add 100.43.72.0/24 via 208.8.8.2
+WINDOWS: route add 100.43.72.0 mask 255.255.255.0 10.3.3.1
+
+network address = network prefix
+192.168.1.55/28 = .48
+192.168.1.105/28 = .96
+192.168.1.10/28 = .0
+192.168.1.70/28 = .64
+
+FIND THE KALYE OR NETWORK ADDRESS:
+192.168.1.100/26 = 192.168.1.64 
+EIGRP NETWORK: 192.168.1.64 0.0.0.63
+OSPF: NETWORK 192.168.1.64 X.X.X.192
+BGP: NETWORK 192.168.1.64 MASK X.X.X.192
+
+
+192.168.1.205/27 = 192.168.1.192
+192.168.1.150/30 = 192.168.1.148
+192.168.1.131/28 = 192.168.1.128
+
+192.168.1.205/27 = 192.168.1.192
+EIGRP NETWORK: 192.168.1.64 0.0.0.31
+OSPF NETWORK: 192.168.1.64 X.X.X.31
+BGP NETWORK: 192.168.1.64 MASK X.X.X.31
+
+HOW TO CONFIGURE REAL POGO BGP:
+R1:
+config t
+router bgp 1
+bgp router-id 1.1.1.1
+bgp log-neighbor-changes
+neighbor 208.8.8.4 remote-as 45
+neighbor 207.7.7.2 remote-as 2
+neighbor 209.9.9.3 remote-as 3
+address-family ipv4
+neighbor 208.8.8.4 activate
+neighbor 207.7.7.2 activate
+neighbor 209.9.9.3 activate
+network 209.9.9.0 mask 255.255.255.0
+network 208.8.8.0 mask 255.255.255.0
+network 207.7.7.0 mask 255.255.255.0
+network 10.1.1.0 mask 255.255.255.252
+
+access-list BAWALBAHAY
+DENY addict
+deny
+droga
+deny magnanakaw
+deny manguutang
+permit all
+interface gatebahay
+apply-list bawalbahay in
+
+EXTENDED LIST: specific
+act		type			source		destination		anoklase:
+deny	insect			basura		ulammo			langaw
+deny	seasoning		grocery		ulammo			betsin
+deny	tao				cr			ulammo			guy
