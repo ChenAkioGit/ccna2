@@ -1,0 +1,206 @@
+<rpc message-id="1" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <edit-config>
+    <target>
+      <running/>
+    </target>
+    <config>
+      <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+        <interface>
+          <Loopback>
+            <name>1</name>
+            <description>Configured via raw NETCONF SSH</description>
+            <ip>
+              <address>
+                <primary>
+                  <address>1.1.1.1</address>
+                  <mask>255.255.255.255</mask>
+                </primary>
+              </address>
+            </ip>
+          </Loopback>
+		  
+		  <Loopback>
+            <name>2</name>
+            <description>Configured via raw NETCONF SSH</description>
+            <ip>
+              <address>
+                <primary>
+                  <address>2.2.2.2</address>
+                  <mask>255.255.255.255</mask>
+                </primary>
+              </address>
+            </ip>
+          </Loopback>
+        </interface>
+      </native>
+    </config>
+  </edit-config>
+</rpc>
+]]>]]>
+
+deny 66.254.114.238
+deny 66.254.114.79
+deny 66.254.114.79
+deny 66.254.114.234
+
+deny 172.67.133.243
+deny 104.21.55.88
+deny 208.77.20.35
+
+config t
+ ip access-list standard FWP1
+ ip access-list standard FWP1
+  deny 66.254.114.0 0.0.0.255
+  deny 172.67.133.0 0.0.0.255
+  deny 104.21.55.0 0.0.0.255
+  deny 208.77.20.0 0.0.0.255
+  permit any
+  
+ int gi 1
+ no ip access-group FWP1 in
+  end
+show ip access-list int g1
+
+104.20.42.168
+50.6.160.47
+184.168.125.216
+
+config t
+ ip access-list standard FWP3
+  deny 162.159.137.0 0.0.0.255
+  deny 172.67.203.0 0.0.0.255
+  deny 13.248.169.0 0.0.0.255
+  deny 172.67.173.0 0.0.0.255
+  deny 172.67.173.0 0.0.0.255
+  deny 5.253.85.0 0.0.0.255
+  permit any
+  
+   int gi 1
+ ip access-group FWP3 in
+  end
+show ip access-list int g1
+
+10.3.3.111
+
+net use \\10.3.3.111\ipc$
+net use x: /delete
+net use x: \\10.3.3.111\c$
+
+conf t
+ no ip access-list extended FWP4
+ ip access-list extended FWP4
+ permit tcp Any host 208.8.8.100 eq 80 log
+ permit tcp Any host 208.8.8.100 eq 443 log
+ permit icmp Any host 208.8.8.100 log
+ permit tcp Any host 208.8.8.100 eq 22 log
+ permit tcp Any host 208.8.8.100 eq 53 log
+ Int gi 1
+  no ip access-group FWP4 in
+  end
+  
+  conf t
+ no ip access-list extended FWP4
+ ip access-list extended FWP4
+ permit tcp Any host 208.8.8.100 eq 80 log
+ permit tcp Any host 208.8.8.100 eq 443 log
+ permit icmp Any host 208.8.8.100 log
+ permit tcp Any host 208.8.8.100 eq 22 log
+ permit tcp Any host 208.8.8.100 eq 53 log
+ Int gi 1
+  no ip access-group FWP4 in
+  end
+  
+    conf t
+ no ip access-list extended FWP4
+ ip access-list extended FWP4
+ permit tcp Any host 208.8.8.100 eq 23 log
+ permit tcp Any host 208.8.8.100 eq 2000 log
+ permit tcp Any host 208.8.8.100 eq 143 log
+ permit tcp Any host 208.8.8.100 eq 110 log
+ permit tcp Any host 208.8.8.100 eq 20 log
+ permit tcp Any host 208.8.8.100 eq 21 log
+ permit udp Any host 208.8.8.100 eq 123 log
+ Int gi 1
+  no ip access-group FWP4 in
+  end
+  
+  !@BLDG-1
+sudo su
+hostname BLDG-PH
+ifconfig eth0 10.11.11.101 netmask 255.255.255.224 up
+route add default gw 10.11.11.113
+ping 10.11.11.113
+
+!@BLDG-2
+sudo su
+hostname BLDG-PH
+ifconfig eth0 10.11.11.102 netmask 255.255.255.224 up
+route add default gw 10.11.11.113
+ping 10.11.11.113
+
+!@BLDG-3
+sudo su
+hostname BLDG-PH
+ifconfig eth0 10.11.11.103 netmask 255.255.255.224 up
+route add default gw 10.11.11.113
+ping 10.11.11.113
+
+NAT
+1. DEFINE INSIDE & OUTSIDE
+!@UTM-PH
+conf t
+int g1
+ip nat outside
+int g3
+ip nat inside
+end
+
+2. MATCH TRAFFIC
+!@UTM-PH
+conf t
+ip access-list extended NAT
+permit ip 10.11.11.96 0.0.0.31 any
+end
+
+conf t
+access-list 1 permit 10.11.11.96 0.0.0.31
+end
+
+3. CONFIGURE NAT
+!@UTM-PH
+conf t
+ip nat inside source list NAT interface g1 overload
+end
+show ip nat translations
+
+!@UTM-PH
+conf t
+ip nat inside source static tcp 10.11.11.101 80 208.8.8.69 8080
+ip nat inside source static tcp 10.11.11.102 443 208.8.8.69 8443
+ip nat inside source static tcp 10.11.11.103 80 208.8.8.69 80
+ip nat inside source static tcp 10.11.11.103 443 208.8.8.69 8443
+end
+
+10.11.11.101 BLDG-1 180 > 208.8.8.80 2345
+10.11.11.101 BLDG-1 22 > 208.8.8.80 2222
+10.11.11.102 BLDG-2 443 > 208.8.8.80 6969
+10.11.11.102 BLDG-2 22 > 208.8.8.80 2222
+10.11.11.103 BLDG-3 22 > 208.8.8.80 2222
+
+conf t
+ip nat inside source static tcp 10.11.11.101 80 208.8.8.80 2345
+ip nat inside source static tcp 10.11.11.101 443 208.8.8.80 2222
+ip nat inside source static tcp 10.11.11.102 80 208.8.8.80 6969
+ip nat inside source static tcp 10.11.11.102 443 208.8.8.80 2222
+ip nat inside source static tcp 10.11.11.103 443 208.8.8.80 2222
+end
+
+!@UTM-PH
+conf tcp
+ip domain name ccna.com
+crypto key generate rsa modulus 1024
+ip ssh version 2
+line vty 0 14
+transport input all
+login local
+end
