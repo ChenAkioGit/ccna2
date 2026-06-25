@@ -204,3 +204,38 @@ line vty 0 14
 transport input all
 login local
 end
+
+Camera 6 MAC Address (fa0/6):   001a.0704.7f64
+Camera 8 MAC Address (fa0/8):   001a.0709.c252
+Ephone 1 MAC Address (fa0/5):   ccd8.c1fb.12ff
+Ephone 2 MAC Address (fa0/7):   ccd8.c1fb.2325
+
+conf t
+ hostname edge-21
+ service password-encryption
+ no logging console
+ no ip domain-lookup
+ ip domain name autoday1.com
+ username admin privilege 15 secret pass
+ line vty 0 14
+  transport input all
+  login local
+  exec-timeout 0 0
+ crypto key generate rsa modulus 2048 label devs
+ ip ssh rsa keypair-name devs
+ ip ssh version 2
+ end
+
+192.168.101.226
+
+!@UTM-PH
+conf t
+int g3
+ip add 10.11.11.113 255.255.255.224
+no shut
+end
+
+ip route add 0.0.0.0/0 via 10.11.11.113 dev ens224
+
+RESTCONF: DATA WRITTEN IN JSON/XML - 443 HTTPS
+NETCONF: DATA WRITTEN IN JSON/XML - SSH 833
